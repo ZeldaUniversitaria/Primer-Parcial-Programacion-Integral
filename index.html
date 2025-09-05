@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Control de Acceso</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<img src="Grupo_Planeta_logo.webp" alt="Logo de la empresa">
+<h1>Registro de Acceso</h1>
+
+
+<form id="tipoForm">
+<label>Selecciona tu tipo:
+<select id="tipoPersona">
+<option value="">-- Selecciona --</option>
+<option value="Empleado">Empleado</option>
+<option value="Visitante">Visitante</option>
+</select>
+</label>
+</form>
+
+
+<form id="formEmpleado" class="hidden" action="registro.php" method="POST">
+<input type="hidden" name="tipo" value="Empleado">
+<label>Nombre completo: <input type="text" name="nombre" required></label>
+<label>Matrícula: <input type="text" name="matricula" required></label>
+<label>Piso al que ingresa:
+<select name="piso" required>
+<option value="">-- Selecciona --</option>
+<option value="Piso 1">Piso 1</option>
+<option value="Piso 2">Piso 2</option>
+<option value="Piso 3">Piso 3</option>
+<option value="Piso 4">Piso 4</option>
+<option value="Piso 5">Piso 5</option>
+</select>
+</label>
+<label>Tipo de ingreso:
+<select name="ingreso">
+<option value="Entrada">Entrada</option>
+<option value="Salida">Salida</option>
+</select>
+</label>
+<input type="hidden" name="empleado_visita" value="">
+<button type="submit">Registrar acceso</button>
+</form>
+
+
+<form id="formVisitante" class="hidden" action="registro.php" method="POST">
+<input type="hidden" name="tipo" value="Visitante">
+<label>Nombre completo: <input type="text" name="nombre" required></label>
+<input type="hidden" name="matricula" value="">
+<label>Piso al que ingresa:
+<select name="piso" required>
+<option value="">-- Selecciona --</option>
+<option value="Piso 1">Piso 1</option>
+<option value="Piso 2">Piso 2</option>
+<option value="Piso 3">Piso 3</option>
+<option value="Piso 4">Piso 4</option>
+<option value="Piso 5">Piso 5</option>
+</select>
+</label>
+<label>Empleado a visitar: <input type="text" name="empleado_visita" required></label>
+<label>Tipo de ingreso:
+<select name="ingreso">
+<option value="Entrada">Entrada</option>
+<option value="Salida">Salida</option>
+</select>
+</label>
+<button type="submit">Registrar acceso</button>
+</form>
+
+
+<!-- <a href="ver_registros.php">📋 Ver registros</a> -->
+
+
+<script>
+const tipoSelect = document.getElementById("tipoPersona");
+const formEmpleado = document.getElementById("formEmpleado");
+const formVisitante = document.getElementById("formVisitante");
+
+
+tipoSelect.addEventListener("change", () => {
+formEmpleado.classList.add("hidden");
+formVisitante.classList.add("hidden");
+if (tipoSelect.value === "Empleado") {
+formEmpleado.classList.remove("hidden");
+} else if (tipoSelect.value === "Visitante") {
+formVisitante.classList.remove("hidden");
+}
+});
+</script>
+</body>
+</html>
