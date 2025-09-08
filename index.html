@@ -5,91 +5,138 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Control de Acceso</title>
   <link rel="stylesheet" href="estilo.css">
+  <style>
+    .step, .formulario {
+      display: none;
+    }
+    .step.active, .formulario.active {
+      display: block;
+    }
+    .boton-opcion {
+      display: inline-block;
+      width: 100%;
+      padding: 16px;
+      margin: 10px 0;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      background-color: #183369;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .boton-opcion:hover {
+      background-color: #0e224f;
+    }
+  </style>
 </head>
 <body>
-<img src="Grupo_Planeta_logo.webp" alt="Logo de la empresa">
-<h1>Registro de Acceso</h1>
+  <img src="Grupo_Planeta_logo.webp" alt="Logo de la empresa">
+  <h1>Bienvenido a Editorial Planeta</h1>
 
+  <!-- Paso 1: ¿Empleado o visitante? -->
+  <div id="step1" class="step active">
+    <h2>¿Eres empleado o visitante?</h2>
+    <button class="boton-opcion" onclick="seleccionarTipo('Empleado')">Empleado</button>
+    <button class="boton-opcion" onclick="seleccionarTipo('Visitante')">Visitante</button>
+  </div>
 
-<form id="tipoForm">
-<label>Selecciona tu tipo:
-<select id="tipoPersona">
-<option value="">-- Selecciona --</option>
-<option value="Empleado">Empleado</option>
-<option value="Visitante">Visitante</option>
-</select>
-</label>
-</form>
+  <!-- Paso 2: ¿Entrada o salida? -->
+  <div id="step2" class="step">
+    <h2>¿Estás de entrada o salida?</h2>
+    <button class="boton-opcion" onclick="seleccionarIngreso('Entrada')">Entrada</button>
+    <button class="boton-opcion" onclick="seleccionarIngreso('Salida')">Salida</button>
+  </div>
 
+  <!-- Formulario Empleado -->
+  <form id="formEmpleado" class="formulario" action="registro.php" method="POST">
+    <input type="hidden" name="tipo" value="Empleado">
+    <input type="hidden" name="ingreso" id="ingresoEmpleado">
+    <label>Nombre completo: <input type="text" name="nombre" required></label>
+    <label>Matrícula: <input type="text" name="matricula" required></label>
+    <label id="pisoEmpleadoLabel">Piso al que ingresa:
+      <select name="piso">
+        <option value="">-- Selecciona --</option>
+        <option value="Piso 1">Piso 1: Recepción y Servicio al cliente</option>
+        <option value="Piso 2">Piso 2: Prensa y comunicados</option>
+        <option value="Piso 3">Piso 3: Diseño editorial e ilustración</option>
+        <option value="Piso 4">Piso 4: Redacción e impresión</option>
+        <option value="Piso 5">Piso 5: Gerencia y oficinas</option>
+      </select>
+    </label>
+    <input type="hidden" name="empleado_visita" value="">
+    <button type="submit">Registrar acceso</button>
+  </form>
 
-<form id="formEmpleado" class="hidden" action="registro.php" method="POST">
-<input type="hidden" name="tipo" value="Empleado">
-<label>Nombre completo: <input type="text" name="nombre" required></label>
-<label>Matrícula: <input type="text" name="matricula" required></label>
-<label>Piso al que ingresa:
-<select name="piso" required>
-<option value="">-- Selecciona --</option>
-<option value="Piso 1">Piso 1</option>
-<option value="Piso 2">Piso 2</option>
-<option value="Piso 3">Piso 3</option>
-<option value="Piso 4">Piso 4</option>
-<option value="Piso 5">Piso 5</option>
-</select>
-</label>
-<label>Tipo de ingreso:
-<select name="ingreso">
-<option value="Entrada">Entrada</option>
-<option value="Salida">Salida</option>
-</select>
-</label>
-<input type="hidden" name="empleado_visita" value="">
-<button type="submit">Registrar acceso</button>
-</form>
+  <!-- Formulario Visitante -->
+  <form id="formVisitante" class="formulario" action="registro.php" method="POST">
+    <input type="hidden" name="tipo" value="Visitante">
+    <input type="hidden" name="ingreso" id="ingresoVisitante">
+    <input type="hidden" name="matricula" value="">
+    <label>Nombre completo: <input type="text" name="nombre" required></label>
+    <label id="pisoVisitanteLabel">Piso al que ingresa:
+      <select name="piso">
+        <option value="">-- Selecciona --</option>
+        <option value="Piso 1">Piso 1: Recepción y Servicio al cliente</option>
+        <option value="Piso 2">Piso 2: Prensa y comunicados</option>
+        <option value="Piso 3">Piso 3: Diseño editorial e ilustración</option>
+        <option value="Piso 4">Piso 4: Redacción e impresión</option>
+        <option value="Piso 5">Piso 5: Gerencia y oficinas</option>
+      </select>
+    </label>
+    <label>Empleado a visitar: <input type="text" name="empleado_visita" required></label>
+    <button type="submit">Registrar acceso</button>
+  </form>
+  <a href="index.html">Volver al inicio</a>
+  <a href="ver_registros.php">Ver registros</a>
 
+  <script>
+    let tipoSeleccionado = "";
 
-<form id="formVisitante" class="hidden" action="registro.php" method="POST">
-<input type="hidden" name="tipo" value="Visitante">
-<label>Nombre completo: <input type="text" name="nombre" required></label>
-<input type="hidden" name="matricula" value="">
-<label>Piso al que ingresa:
-<select name="piso" required>
-<option value="">-- Selecciona --</option>
-<option value="Piso 1">Piso 1</option>
-<option value="Piso 2">Piso 2</option>
-<option value="Piso 3">Piso 3</option>
-<option value="Piso 4">Piso 4</option>
-<option value="Piso 5">Piso 5</option>
-</select>
-</label>
-<label>Empleado a visitar: <input type="text" name="empleado_visita" required></label>
-<label>Tipo de ingreso:
-<select name="ingreso">
-<option value="Entrada">Entrada</option>
-<option value="Salida">Salida</option>
-</select>
-</label>
-<button type="submit">Registrar acceso</button>
-</form>
+    function seleccionarTipo(tipo) {
+      tipoSeleccionado = tipo;
+      document.getElementById("step1").classList.remove("active");
+      document.getElementById("step2").classList.add("active");
+    }
 
+    function seleccionarIngreso(ingreso) {
+      document.getElementById("step2").classList.remove("active");
 
-<!-- <a href="ver_registros.php">📋 Ver registros</a> -->
+      if (tipoSeleccionado === "Empleado") {
+        document.getElementById("ingresoEmpleado").value = ingreso;
+        document.getElementById("formEmpleado").classList.add("active");
 
+        const pisoLabel = document.querySelector("#formEmpleado select[name='piso']").parentElement;
+        const boton = document.querySelector("#formEmpleado button");
 
-<script>
-const tipoSelect = document.getElementById("tipoPersona");
-const formEmpleado = document.getElementById("formEmpleado");
-const formVisitante = document.getElementById("formVisitante");
+        if (ingreso === "Salida") {
+          pisoLabel.style.display = "none";
+          boton.textContent = "Registrar salida";
+          document.getElementById("formEmpleado").action = "registro.php";
+        } else {
+          pisoLabel.style.display = "block";
+          boton.textContent = "Registrar acceso";
+          document.getElementById("formEmpleado").action = "registro.php";
+        }
 
+      } else {
+        document.getElementById("ingresoVisitante").value = ingreso;
+        document.getElementById("formVisitante").classList.add("active");
 
-tipoSelect.addEventListener("change", () => {
-formEmpleado.classList.add("hidden");
-formVisitante.classList.add("hidden");
-if (tipoSelect.value === "Empleado") {
-formEmpleado.classList.remove("hidden");
-} else if (tipoSelect.value === "Visitante") {
-formVisitante.classList.remove("hidden");
-}
-});
-</script>
+        const pisoLabel = document.querySelector("#formVisitante select[name='piso']").parentElement;
+        const boton = document.querySelector("#formVisitante button");
+
+        if (ingreso === "Salida") {
+          pisoLabel.style.display = "none";
+          boton.textContent = "Registrar salida";
+          document.getElementById("formVisitante").action = "registro.php";
+        } else {
+          pisoLabel.style.display = "block";
+          boton.textContent = "Registrar acceso";
+          document.getElementById("formVisitante").action = "registro.php";
+        }
+      }
+    }
+  </script>
 </body>
 </html>
